@@ -1,5 +1,8 @@
-// Mock data para o jogo Mario Kart
-export const mockPlayer = {
+// Sistema de dados offline para o jogo Mario Kart
+const STORAGE_KEY = 'kartrush_gamedata';
+
+// Dados padrão do jogador
+const defaultPlayer = {
   id: 1,
   name: "Player 1",
   coins: 500,
@@ -7,7 +10,15 @@ export const mockPlayer = {
   completedTutorial: false,
   unlockedTracks: [1, 2],
   unlockedCars: [1, 2],
-  selectedCar: 1
+  selectedCar: 1,
+  ownedPowers: [1, 2], // Míssil e Escudo por padrão
+  equippedPowers: [1, 2], // Míssil e Escudo equipados
+  carCustomization: {
+    1: { baseColor: "#FF6B6B", wheels: "racing", engine: "basic", stickers: [] }
+  },
+  bestTimes: {},
+  totalRaces: 0,
+  victories: 0
 };
 
 export const mockCars = [
