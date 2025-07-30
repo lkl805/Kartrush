@@ -1,7 +1,8 @@
 import React from "react";
 import { Card, CardContent } from "./ui/card";
 import { Button } from "./ui/button";
-import { Play, Settings, ShoppingCart, Car, Trophy, Coins } from "lucide-react";
+import { Play, Settings, ShoppingCart, Car, Trophy, Coins, RotateCcw } from "lucide-react";
+import { GameData } from "../mock";
 
 const MainMenu = ({ player, onNavigate, needsTutorial }) => {
   const handleStartRace = () => {
@@ -9,6 +10,13 @@ const MainMenu = ({ player, onNavigate, needsTutorial }) => {
       onNavigate("tutorial");
     } else {
       onNavigate("tracks");
+    }
+  };
+
+  const handleResetGame = () => {
+    if (window.confirm("Tem certeza que deseja resetar todos os dados do jogo? Esta ação não pode ser desfeita.")) {
+      const resetData = GameData.reset();
+      window.location.reload(); // Reload to apply reset
     }
   };
 
