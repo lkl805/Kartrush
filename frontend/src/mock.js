@@ -21,6 +21,57 @@ const defaultPlayer = {
   victories: 0
 };
 
+// Funções de gerenciamento offline
+export const GameData = {
+  // Carrega dados do localStorage ou retorna dados padrão
+  load() {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const data = JSON.parse(saved);
+        return { ...defaultPlayer, ...data };
+      }
+      return { ...defaultPlayer };
+    } catch (error) {
+      console.error('Erro ao carregar dados:', error);
+      return { ...defaultPlayer };
+    }
+  },
+
+  // Salva dados no localStorage
+  save(playerData) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(playerData));
+      return true;
+    } catch (error) {
+      console.error('Erro ao salvar dados:', error);
+      return false;
+    }
+  },
+
+  // Reseta dados para padrão
+  reset() {
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+      return { ...defaultPlayer };
+    } catch (error) {
+      console.error('Erro ao resetar dados:', error);
+      return { ...defaultPlayer };
+    }
+  },
+
+  // Atualiza dados específicos
+  update(updates) {
+    const current = this.load();
+    const updated = { ...current, ...updates };
+    this.save(updated);
+    return updated;
+  }
+};
+
+// Mock data público para uso dos componentes
+export const mockPlayer = GameData.load();
+
 export const mockCars = [
   {
     id: 1,
