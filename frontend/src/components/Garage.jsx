@@ -2,12 +2,15 @@ import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import { ArrowLeft, Coins, Zap, Gauge, Steering } from "lucide-react";
-import { mockCars, mockCustomization } from "../mock";
+import { mockCars, mockCustomization, GameData } from "../mock";
 
 const Garage = ({ player, onUpdatePlayer, onBack }) => {
   const [selectedCar, setSelectedCar] = useState(mockCars.find(car => car.id === player.selectedCar) || mockCars[0]);
   const [activeTab, setActiveTab] = useState("cars");
-  const [previewCar, setPreviewCar] = useState({ ...selectedCar });
+  const [previewCar, setPreviewCar] = useState({ 
+    ...selectedCar,
+    ...(player.carCustomization && player.carCustomization[selectedCar.id] ? player.carCustomization[selectedCar.id] : {})
+  });
 
   const handlePurchase = (item, cost, type) => {
     if (player.coins >= cost) {
@@ -19,14 +22,30 @@ const Garage = ({ player, onUpdatePlayer, onBack }) => {
         setPreviewCar(prev => ({ ...prev, wheels: item.value }));
       } else if (type === "engine") {
         setPreviewCar(prev => ({ ...prev, engine: item.value }));
+      } else if (type === "car") {
+        const newUnlockedCars = [...(player.unlockedCars || []), item.id];
+        onUpdatePlayer({ unlockedCars: newUnlockedCars });
       }
     }
   };
 
   const saveCustomization = () => {
-    // In real app, this would save to database
-    onUpdatePlayer({ selectedCar: previewCar.id });
-    console.log("Customização salva:", previewCar);
+    const newCustomization = {
+      ...player.carCustomization,
+      [previewCar.id]: {
+        baseColor: previewCar.baseColor,
+        wheels: previewCar.wheels,
+        engine: previewCar.engine,
+        stickers: previewCar.stickers || []
+      }
+    };
+    
+    onUpdatePlayer({ 
+      selectedCar: previewCar.id,
+      carCustomization: newCustomization
+    });
+    
+    console.log("Customização salva offline:", newCustomization);
   };
 
   const renderCarStats = (car) => {
