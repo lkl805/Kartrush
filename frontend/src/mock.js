@@ -277,13 +277,19 @@ export const mockCustomization = {
   ]
 };
 
-// Função para simular compra
+// Função para simular compra offline
 export const mockPurchase = (item, cost) => {
-  return mockPlayer.coins >= cost;
+  const current = GameData.load();
+  if (current.coins >= cost) {
+    GameData.update({ coins: current.coins - cost });
+    return true;
+  }
+  return false;
 };
 
-// Função para simular save de progresso
+// Função para salvar progresso offline
 export const mockSaveProgress = (data) => {
-  console.log("Salvando progresso:", data);
+  console.log("Salvando progresso offline:", data);
+  GameData.save(data);
   return Promise.resolve(true);
 };
