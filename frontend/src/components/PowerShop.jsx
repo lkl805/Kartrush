@@ -127,7 +127,7 @@ const PowerShop = ({ player, onUpdatePlayer, onBack }) => {
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                 {mockPowers.map((power) => {
-                  const isOwned = power.owned;
+                  const isOwned = (player.ownedPowers || []).includes(power.id);
                   const isEquipped = equippedPowers.includes(power.id);
                   const canAfford = player.coins >= power.price;
                   
