@@ -48,6 +48,9 @@ const MainMenu = ({ player, onNavigate, needsTutorial }) => {
           <div className="text-green-400">
             <span>{player.name}</span>
           </div>
+          <div className="text-gray-400 text-sm">
+            <span>Corridas: {player.totalRaces || 0}</span>
+          </div>
         </CardContent>
       </Card>
 
@@ -84,6 +87,18 @@ const MainMenu = ({ player, onNavigate, needsTutorial }) => {
         >
           <Trophy className="w-8 h-8 mr-3" />
           Pistas
+        </Button>
+      </div>
+
+      {/* Reset Button */}
+      <div className="mt-6">
+        <Button
+          onClick={handleResetGame}
+          variant="outline"
+          className="border-red-400 text-red-400 hover:bg-red-400/20"
+        >
+          <RotateCcw className="w-4 h-4 mr-2" />
+          Resetar Jogo
         </Button>
       </div>
 
