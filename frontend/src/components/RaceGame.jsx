@@ -282,12 +282,16 @@ const RaceGame = ({ player, track, gameMode, onRaceEnd }) => {
       cancelAnimationFrame(animationRef.current);
     }
     
+    // Calculate final race time
+    const finalTime = (Date.now() - raceData.startTime) / 1000;
+    const formattedTime = `${Math.floor(finalTime / 60)}:${Math.floor(finalTime % 60).toString().padStart(2, '0')}`;
+    
     // Award coins based on performance
     const coinsEarned = raceData.position === 1 ? 100 : raceData.position === 2 ? 50 : 25;
-    console.log(`Corrida finalizada! Moedas ganhas: ${coinsEarned}`);
+    console.log(`Corrida finalizada offline! Tempo: ${formattedTime}, Moedas ganhas: ${coinsEarned}`);
     
     setTimeout(() => {
-      onRaceEnd(coinsEarned);
+      onRaceEnd(coinsEarned, formattedTime);
     }, 3000);
   };
 
