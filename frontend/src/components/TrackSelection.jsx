@@ -30,10 +30,13 @@ const TrackSelection = ({ player, onSelectTrack, onBack }) => {
 
   const handleStartRace = () => {
     if (selectedTrack) {
-      // In real app, this would start the race with selected track and mode
-      console.log(`Iniciando corrida: ${selectedTrack.name} - Modo: ${gameMode}`);
+      console.log(`Iniciando corrida offline: ${selectedTrack.name} - Modo: ${gameMode}`);
       onSelectTrack(selectedTrack, gameMode);
     }
+  };
+
+  const isTrackUnlocked = (trackId) => {
+    return (player.unlockedTracks || []).includes(trackId);
   };
 
   return (
