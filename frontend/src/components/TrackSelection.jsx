@@ -179,7 +179,7 @@ const TrackSelection = ({ player, onSelectTrack, onBack }) => {
                       <div className="flex items-center justify-between">
                         <Trophy className="w-4 h-4 text-green-400" />
                         <span className="text-green-400 text-sm">
-                          {selectedTrack.bestTime}
+                          {player.bestTimes && player.bestTimes[selectedTrack.id] || "---"}
                         </span>
                       </div>
                     )}
