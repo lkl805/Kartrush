@@ -178,25 +178,34 @@ const Garage = ({ player, onUpdatePlayer, onBack }) => {
             <CardContent className="p-4">
               {activeTab === "cars" && (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {mockCars.map((car) => (
+                  {mockCars.map((car) => {
+                    const isUnlocked = (player.unlockedCars || []).includes(car.id);
+                    return (
                     <div
                       key={car.id}
                       onClick={() => {
-                        setSelectedCar(car);
-                        setPreviewCar({ ...car });
+                        if (isUnlocked) {
+                          setSelectedCar(car);
+                          setPreviewCar({ 
+                            ...car,
+                            ...(player.carCustomization && player.carCustomization[car.id] ? player.carCustomization[car.id] : {})
+                          });
+                        }
                       }}
                       className={`p-4 rounded-lg cursor-pointer transition-all duration-200 ${
                         selectedCar.id === car.id
                           ? "bg-blue-500/30 border-2 border-blue-400"
-                          : "bg-gray-700/30 border-2 border-gray-600 hover:border-gray-500"
+                          : isUnlocked
+                          ? "bg-gray-700/30 border-2 border-gray-600 hover:border-gray-500"
+                          : "bg-red-700/30 border-2 border-red-600 opacity-60"
                       }`}
                     >
                       <h3 className="text-white font-bold mb-2">{car.name}</h3>
                       <div className="flex items-center justify-between">
                         <span className="text-gray-300">
-                          {car.unlocked ? "Desbloqueado" : `${car.price} moedas`}
+                          {isUnlocked ? "Desbloqueado" : `${car.price} moedas`}
                         </span>
-                        {!car.unlocked && player.coins >= car.price && (
+                        {!isUnlocked && player.coins >= car.price && (
                           <Button size="sm" onClick={(e) => {
                             e.stopPropagation();
                             handlePurchase(car, car.price, "car");
@@ -206,7 +215,7 @@ const Garage = ({ player, onUpdatePlayer, onBack }) => {
                         )}
                       </div>
                     </div>
-                  ))}
+                  )})}
                 </div>
               )}
 
