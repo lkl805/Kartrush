@@ -2,27 +2,34 @@ import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import { ArrowLeft, Coins, Shield, Zap, Target, Droplets, Star } from "lucide-react";
-import { mockPowers } from "../mock";
+import { mockPowers, GameData } from "../mock";
 
 const PowerShop = ({ player, onUpdatePlayer, onBack }) => {
-  const [equippedPowers, setEquippedPowers] = useState([1, 2]); // Player starts with missile and shield
+  const [equippedPowers, setEquippedPowers] = useState(player.equippedPowers || [1, 2]);
 
   const handlePurchase = (power) => {
     if (player.coins >= power.price) {
-      onUpdatePlayer({ coins: player.coins - power.price });
-      // In real app, this would update owned powers in database
-      console.log(`Poder ${power.name} comprado!`);
+      const newOwnedPowers = [...(player.ownedPowers || []), power.id];
+      onUpdatePlayer({ 
+        coins: player.coins - power.price,
+        ownedPowers: newOwnedPowers
+      });
+      console.log(`Poder ${power.name} comprado e salvo offline!`);
     }
   };
 
   const handleEquip = (powerId) => {
     if (equippedPowers.length < 3) {
-      setEquippedPowers([...equippedPowers, powerId]);
+      const newEquipped = [...equippedPowers, powerId];
+      setEquippedPowers(newEquipped);
+      onUpdatePlayer({ equippedPowers: newEquipped });
     }
   };
 
   const handleUnequip = (powerId) => {
-    setEquippedPowers(equippedPowers.filter(id => id !== powerId));
+    const newEquipped = equippedPowers.filter(id => id !== powerId);
+    setEquippedPowers(newEquipped);
+    onUpdatePlayer({ equippedPowers: newEquipped });
   };
 
   const getPowerIcon = (powerName) => {
