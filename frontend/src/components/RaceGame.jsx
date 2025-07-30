@@ -3,7 +3,7 @@ import { Card, CardContent } from "./ui/card";
 import { Button } from "./ui/button";
 import { ArrowLeft, Pause, Play } from "lucide-react";
 
-const RaceGame = ({ player, onRaceEnd }) => {
+const RaceGame = ({ player, track, gameMode, onRaceEnd }) => {
   const canvasRef = useRef(null);
   const animationRef = useRef(null);
   const [gameState, setGameState] = useState("racing"); // racing, paused, finished
@@ -12,7 +12,8 @@ const RaceGame = ({ player, onRaceEnd }) => {
     lap: 1,
     totalLaps: 3,
     time: 0,
-    speed: 0
+    speed: 0,
+    startTime: Date.now()
   });
   
   // Game objects
