@@ -60,17 +60,21 @@ const TrackSelection = ({ player, onSelectTrack, onBack }) => {
         {/* Track List */}
         <div className="lg:col-span-2">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {mockTracks.map((track) => (
+            {mockTracks.map((track) => {
+              const isUnlocked = isTrackUnlocked(track.id);
+              const playerBestTime = player.bestTimes && player.bestTimes[track.id];
+              
+              return (
               <Card 
                 key={track.id}
                 className={`cursor-pointer transition-all duration-200 ${
-                  !track.unlocked
+                  !isUnlocked
                     ? "bg-gray-800/50 border-gray-600 opacity-60"
                     : selectedTrack?.id === track.id
                     ? "bg-blue-500/30 border-blue-400 ring-2 ring-blue-400"
                     : "bg-black/30 border-gray-600 hover:border-gray-400"
                 }`}
-                onClick={() => track.unlocked && setSelectedTrack(track)}
+                onClick={() => isUnlocked && setSelectedTrack(track)}
               >
                 <CardHeader className="pb-2">
                   <div className="flex items-center justify-between">
@@ -78,7 +82,7 @@ const TrackSelection = ({ player, onSelectTrack, onBack }) => {
                       <span className="text-2xl">{getThemeIcon(track.theme)}</span>
                       {track.name}
                     </CardTitle>
-                    {!track.unlocked && <Lock className="w-5 h-5 text-gray-400" />}
+                    {!isUnlocked && <Lock className="w-5 h-5 text-gray-400" />}
                   </div>
                 </CardHeader>
                 
@@ -112,7 +116,7 @@ const TrackSelection = ({ player, onSelectTrack, onBack }) => {
                     <div className="flex items-center justify-between">
                       <span className="text-gray-300">Melhor tempo:</span>
                       <span className="text-green-400">
-                        {track.bestTime || "---"}
+                        {playerBestTime || "---"}
                       </span>
                     </div>
                   </div>
@@ -133,7 +137,7 @@ const TrackSelection = ({ player, onSelectTrack, onBack }) => {
                   </div>
                 </CardContent>
               </Card>
-            ))}
+            )})}
           </div>
         </div>
 
